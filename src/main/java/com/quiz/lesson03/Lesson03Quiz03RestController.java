@@ -13,9 +13,11 @@ public class Lesson03Quiz03RestController {
 	
 	//	http://localhost/lesson03/quiz03/1?id=8&...
 	
-	@RequestMapping("lesson03/quiz03")
-	public String quiz03(
-			@RequestParam("id") int id,
-			@RequestParam("type"))
+//	@RequestMapping("lesson03/quiz03")
+//	public String quiz03(
+//			@RequestParam("id") int id,
+//			@RequestParam("type"))
+	
+	
 	
 }
