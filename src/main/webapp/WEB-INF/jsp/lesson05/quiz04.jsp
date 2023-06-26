@@ -8,10 +8,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 </head>
 <body>
 	<div class="container">
 		<h1>회원 정보 리스트</h1>
+		<img src="/image/sunny.jpg">
 		<table class="table text-center">
 			<thead>
 				<tr>
@@ -28,8 +32,29 @@
 				<tr>
 					<td>${status.count}</td>
 					<td>${member.name}</td>
-					<td><fmt:formatNumber value="${candidate}" /></td>
-					<td><fmt:formatNumber type="percent" value="${candidate / totalCount}" /></td>
+					<td>${member.phoneNumber}
+						<c:choose>
+							<c:when test="${fn:startsWith(member.phoneNumber, \'010') }">
+								${member.phoneNumber}
+							</c:when>
+							<c:otherwise>
+								유효하지 않은 전화번호
+							</c:otherwise>
+						</c:choose>
+					</td>
+					<td>
+						${fn:replace(member.nationality, '삼국시대', '삼국 -')}
+					</td>
+					<td><b>${fn:split(member.email, '@')[0]}<b>${fn:split(member.email, '@')[1]}</td>
+					<td>
+						<c:if test="${fn:length(member.introduce) > 15}">
+							0 15
+							${fn:substring(member.introduce, 0, 15)}
+						</c:if>
+						<c:if test="${fn:length(member.introduce) <= 15}">
+							${member.introduce}
+						</c:if>
+					</td>
 				</tr>
 			</c:forEach>
 			</tbody>

@@ -1,6 +1,5 @@
 package com.quiz.lesson05;
 
-import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.quiz.lesson05.domain.Member;
 
 @RequestMapping("/lesson05")
 @Controller
