@@ -25,4 +25,11 @@ public class WeatherHistoryController {
 		model.addAttribute("weatherHistoryList", weatherHistoryList);
 		return "/weather/weatherHistory";
 	}
+	
+		
+	// 추가 화면
+	@GetMapping("/add_weather_view")
+	public String addWeatherView() {
+		return "weather/addWeather";
+	}
 }
