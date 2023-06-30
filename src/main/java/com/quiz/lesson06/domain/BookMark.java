@@ -2,7 +2,7 @@ package com.quiz.lesson06.domain;
 
 import java.util.Date;
 
-public class BookMark {
+public class Bookmark {
 	private int id;
 	private String name;
 	private String url;
