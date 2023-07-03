@@ -1,11 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+<title>통나무 펜션</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 <%-- AJAX를 사용하려면 jquery 원본 필요 --%>
 <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
@@ -26,37 +25,50 @@
 				<li class="nav-item"><a href="/booking/booking_list_view" class="nav-link text-white font-weight-bold">예약목록</a></li>
 			</ul>
 		</nav>
-		<section class="contents">
-			<h2 class="text-center font-weight-bold m-4">예약 목록 보기</h2>
-			<table class="table text-center">
-				<thead>
-					<tr>
-						<th>이름</th>
-						<th>예약날짜</th>
-						<th>숙박일수</th>
-						<th>숙박인원</th>
-						<th>전화번호</th>
-						<th>예약상태</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-				<c:forEach items="${bookingList}" var="booking">
-					<tr>
-						<td>${booking.name}</td>		
-						<td>
-							<fmt:formatDate value="${booking.date}" pattern="yyyy년 M월 d일" />
-						</td>		
-						<td>${booking.day}</td>		
-						<td>${booking.headcount}</td>		
-						<td>${booking.phoneNumber}</td>		
-						<td>${booking.state}</td>		
-						<td><button type="button" class="del-btn btn btn-danger" data-booking-id="${booking.id}">삭제</button></td>		
-					</tr>
-				</c:forEach>
-				</tbody>
-			</table>
+		<section class="banner bg-info">
+			<img id="bannerImage" src="/image/test06_banner1.jpg"	alt="banner" width="1110" height="500">
 		</section>
+		<section class="reserve bg-primary d-flex">
+			<section
+				class="real-time-reserved col-4 d-flex justify-content-center align-items-center">
+				<div class="display-4 text-white">
+					실시간<br>예약하기
+				</div>
+			</section>
+			<section class="confirm col-4">
+				<div class="m-3">
+					<span class="reserve-confirm mr-3">예약 확인</span>
+				</div>
+
+				<!-- 예약 확인 -->
+				<div id="memberInputBox" class="m-2">
+					<div class="d-flex justify-content-end mr-3">
+						<span class="text-white">이름:</span> 
+						<input type="text" id="name" class="form-control input-form">
+					</div>
+					<div class="d-flex mt-2 justify-content-end mr-3">
+						<span class="text-white">전화번호:</span> 
+						<input type="text" id="phoneNumber" class="form-control input-form">
+					</div>
+
+					<!-- 버튼 -->
+					<div class="text-right mt-3 mr-3">
+						<button type="button" id="searchBtn" class="btn btn-success submit-btn">조회하기</button>
+					</div>
+				</div>
+
+			</section>
+			<section
+				class="inquiry col-4 d-flex justify-content-center align-items-center">
+				<div class="text-white">
+					<h4 class="font-weight-bold">예약문의:</h4>
+					<h1>
+						010-<br>0000-1111
+					</h1>
+				</div>
+			</section>
+		</section>
+
 		<footer>
 			<div class="text-secondary"> 
 				<div><small>제주특별자치도 제주시 애월읍</small></div>
@@ -65,35 +77,45 @@
 			</div>
 		</footer>
 	</div>
-	
 <script>
 	$(document).ready(function() {
-		// 삭제 버튼 클릭
-		$('.del-btn').on('click', function() {
-			//alert("클릭");
+		$('#searchBtn').on('click', function() {
+			// alert("클릭");
+			let name = $('#name').val().trim();
+			let phoneNumber = $('#phoneNumber').val().trim();
 			
-			let deleteBookingId = $(this).data('booking-id');
-			//alert(deleteBookingId);
+			if (!name) {
+				alert("이름을 입력하세요");
+				return;
+			}
+			
+			if (!phoneNumber) {
+				alert("전화번호를 입력하세요");
+				return;
+			}
 			
 			$.ajax({
 				// request
-				type:"delete"
-				, url:"/booking/delete_booking"
-				, data:{"id":deleteBookingId}
+				type:"post"
+				, url:"/booking/search_booking"
+				, data:{"name":name, "phoneNumber":phoneNumber}
 				
 				// response
 				, success:function(data) {
 					if (data.code == 1) {
-					// {"code":1, "result":"성공"}
-						alert("삭제 되었습니다.");
-						location.reload(true);
+						// 성공
+						alert(data.booking.name
+								// 2023-07-03
+								+ "\n날짜:" + data.booking.date.slice(0, 10)
+								+ "\n일수:" + data.booking.day
+								+ "\n인원:" + data.booking.headcount
+								+ "\n상태:" + data.);
 					} else {
-						// {"code":500, "errorMessage":"삭제될 데이터가 없습니다."}
 						alert(data.errorMessage);
 					}
 				}
 				, error:function(request, status, error) {
-					alert("삭제하는데 실패했습니다.");			
+					alert("조회에 실패했습니다.");
 				}
 			});
 		});
