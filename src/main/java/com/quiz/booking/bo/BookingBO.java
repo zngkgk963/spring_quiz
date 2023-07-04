@@ -28,6 +28,12 @@ public class BookingBO {
 	}
 	
 	public Booking getBookingByNameAndPhoneNumber(String name, String phoneNumber) {
-		return bookingMapper.
+		// 가능한 값: [], [bookingA, bookingB...]
+		List<Booking> bookingList = bookingMapper.selectBookingByNameAndPhoneNumber(name, phoneNumber);
+		if (bookingList.isEmpty()) {
+			return null;
+		}
+		
+		return bookingList.get(bookingList.size() - 1); // 마지막 값을 준다. (최신 예약)
 	}
 }
