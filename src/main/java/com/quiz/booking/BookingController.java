@@ -100,14 +100,21 @@ public class BookingController {
 	@ResponseBody
 	@PostMapping("/search_booking")
 	public Map<String, Object> searchBooking(
-			@RequestParam("name") String name,
+			@RequestParam("name") String name, 
 			@RequestParam("phoneNumber") String phoneNumber) {
 		
 		// db select
-		Booking booking = bookingBO.
+		Booking booking = bookingBO.getBookingByNameAndPhoneNumber(name, phoneNumber);
 		
 		// 응답 JSON
 		Map<String, Object> result = new HashMap<>();
+		if (booking == null) {
+			result.put("code", 300);
+			result.put("errorMessage", "예약 내역이 없습니다.");
+		} else {
+			result.put("code", 1);
+			result.put("booking", booking);
+		}
 		
 		return result;
 	}
