@@ -10,4 +10,8 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Integer>
 	// Spring data JPA
 	
 	// save()
+	
+	// findById()
+	
+	// delete(객체);
 }
